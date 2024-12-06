@@ -1,4 +1,4 @@
-
+#functions to convet data to different time periods
 def convert_fifteenminutes(data):
     fifteen_data = {}    
     times = []
