@@ -8,13 +8,21 @@ import math
 stocks = {}
 balance = int(input("enter starting balance : "))
 data_ = data.pres
+
+
 for time in data.sim_data[list(data.sim_data.keys())[0]]:
     print(time)
     preds = {}
+
+    #calculating prediction for each stock
     for company in data_:
         data_[company][time] = data.sim_data[company][time]
         preds[company] = list(prediction_model.predict_stock_movement(data_[company]))
+
+    #ranking each stock based on prediction
     percents = prediction_model.calculate_investment_percent(preds)
+
+    #selling/holding
     if stocks != {}:
         earned = 0
         dels = []
@@ -30,6 +38,8 @@ for time in data.sim_data[list(data.sim_data.keys())[0]]:
         for del_ in dels:
             del stocks[del_]
         balance += earned
+
+    #buying
     if percents != {}:
         spent = 0
         for stock in percents:
@@ -42,6 +52,7 @@ for time in data.sim_data[list(data.sim_data.keys())[0]]:
                 spent += amount
                 print(f"purchased | {stock} | ${price} | {purchase_stocks} | ${purchase_stocks*price} | {stocks[stock]}")
         balance -= spent
+        
     print(f"End balance : ${balance}")
 
 print(f"final balance : ${balance}")
