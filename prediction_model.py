@@ -1,4 +1,8 @@
+#prediction model
+
 import datamanager
+
+#identifies patterns and calcualtes strength of identified patter
 def find_pattern(data):
     data = list(data.values())
     first, second, third = data
@@ -75,6 +79,7 @@ def find_pattern(data):
         return 0,0
     
 
+#predicts stock movement
 def predict_stock_movement(data):
     #converting data to analyze pattern in different time ranges
     hourly_data = datamanager.convert_hour(data)
@@ -87,7 +92,7 @@ def predict_stock_movement(data):
             list(hourly_data.keys())[0] : hourly_data[list(hourly_data.keys())[0]],
             list(hourly_data.keys())[1] : hourly_data[list(hourly_data.keys())[1]]
         }
-    #grabbing patterns of previous 6 data points.
+    #identifying patterns in 8 different time frames and time periods.
     _1, acc1a = find_pattern(datamanager.grabb_last_data(hourly_data, len(list(hourly_data.keys())) - 3, len(list(hourly_data.keys()))))
     _2, acc2a = find_pattern(datamanager.grabb_last_data(thirty_data, len(list(thirty_data.keys())) - 3, len(list(thirty_data.keys()))))
     _3, acc3a = find_pattern(datamanager.grabb_last_data(fifteen_data, len(list(fifteen_data.keys())) - 3, len(list(fifteen_data.keys()))))
@@ -149,6 +154,8 @@ def predict_stock_movement(data):
                 divident -= 0.7
     if (_1 != 0 and _3 != 0) or (_1 != 0 and _2 != 0) or (_3 != 0 and _2 != 0):
         divident -= 0.09
+
+    #accounting for volume in final prediction
     volume = 0
     if hourly_volume_stregth > 1:
         volume += 1
@@ -162,6 +169,7 @@ def predict_stock_movement(data):
     return accuracy / divident , predictions, volume_signs[volume]
  
 def calculate_investment_percent(data):
+    #identifying ideal risk based on prediction strength
     vals = {}
     for stock in data:
         if data[stock][0] > 65:
