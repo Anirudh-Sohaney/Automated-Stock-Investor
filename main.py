@@ -1,3 +1,6 @@
+#simulation program
+#simulates investing pattern for every 5 minutes
+
 import prediction_model
 import data
 import math
@@ -5,7 +8,7 @@ import math
 stocks = {}
 balance = int(input("enter starting balance : "))
 data_ = data.pres
-for time in data.sim_data["nvidia"]:
+for time in data.sim_data[list(data.sim_data.keys())[0]]:
     print(time)
     preds = {}
     for company in data_:
